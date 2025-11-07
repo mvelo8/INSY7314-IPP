@@ -16,24 +16,28 @@ jobs:
       - image: sonarsource/sonar-scanner-cli
     resource_class: small
     steps:
-      - run: 
+      - run:
           name: Install findutils
           command: apt-get update && apt-get install -y findutils
-      - run: find .
+      - run:
+          name: List files
+          command: find .
       - attach_workspace:
           at: ~/workspace
-      - run: |
-          SONAR_BRANCH="${CIRCLE_BRANCH:-master}"
-          echo "Sonar branch value is: $SONAR_BRANCH"
-          echo "Sonar org value is: $SONAR_ORG"
-          sonar-scanner \
-            -Dsonar.projectKey="$SONAR_PROJECT_KEY" \
-            -Dsonar.organization="$SONAR_ORG" \
-            -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.exclusions="**/android/**,**/ios/**" \
-            -Dsonar.login="$SONAR_TOKEN" \
-            -Dsonar.branch.name="$SONAR_BRANCH" \
-            -Dsonar.sources="."
+      - run:
+          name: Run SonarQube analysis
+          command: |
+            SONAR_BRANCH="${CIRCLE_BRANCH:-master}"
+            echo "Sonar branch value is: $SONAR_BRANCH"
+            echo "Sonar org value is: $SONAR_ORG"
+            sonar-scanner \
+              -Dsonar.projectKey="$SONAR_PROJECT_KEY" \
+              -Dsonar.organization="$SONAR_ORG" \
+              -Dsonar.host.url=https://sonarcloud.io \
+              -Dsonar.exclusions="**/android/**,**/ios/**" \
+              -Dsonar.login="$SONAR_TOKEN" \
+              -Dsonar.branch.name="$SONAR_BRANCH" \
+              -Dsonar.sources="."
 
 workflows:
   say-hello-workflow:

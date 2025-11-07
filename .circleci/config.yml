@@ -27,23 +27,12 @@ jobs:
       - image: sonarsource/sonar-scanner-cli
     resource_class: small
     steps:
-      # This will show as "Spin up environment" in CircleCI UI
-      # This step is automatic - no need to define it
-      
-      # This will show as "Preparing environment variables"  
-      # This step is also automatic
-      
-      - run:
-          name: List files
-          command: find .
-      
+      - run: find .
       - attach_workspace:
           at: ~/workspace
           # This will show as "Attaching workspace" in the UI
       
-      - run:
-          name: Run SonarQube analysis
-          command: |
+      - run: |
             SONAR_BRANCH="${CIRCLE_BRANCH:-master}"
             echo "Sonar branch value is: $SONAR_BRANCH"
             echo "Sonar org value is: $SONAR_ORG"
